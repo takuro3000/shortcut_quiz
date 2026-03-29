@@ -1,2 +1,23 @@
-%h1 Quiz#show
-%p Find me in app/views/quiz/show.html.haml
+.container.py-5{ style: "max-width: 640px;" }
+  .card{ data: { controller: "quiz", quiz_answer_value: @quiz.answer } }
+    .card-body.p-4
+      %p.text-muted.mb-1 Question #{@quiz.id}
+      %h4.card-title.mb-4= @quiz.question
+
+      .d-grid.gap-2
+        - @quiz.options.each do |option|
+          %button.btn.btn-outline-primary.btn-lg.text-start{ data: { quiz_target: "option", action: "click->quiz#check", option: option } }
+            = option
+
+      .mt-4{ data: { quiz_target: "result" }, class: "d-none" }
+
+      .mt-3{ data: { quiz_target: "description" }, class: "d-none" }
+        .card.bg-light
+          .card-body
+            %h6.card-title 解説
+            %p.card-text.mb-0= @quiz.description
+
+      .mt-3.text-center{ data: { quiz_target: "nextButton" }, class: "d-none" }
+        - if @next_quiz
+          = link_to "次の問題へ →", quiz_path(@next_quiz), class: "btn btn-primary btn-lg"
+        = link_to "トップに戻る", root_path, class: "btn btn-outline-secondary btn-lg"
